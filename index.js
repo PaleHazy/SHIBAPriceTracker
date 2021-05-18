@@ -2,6 +2,12 @@
 const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_KEY;
+const client = require('twilio')(accountSid, authToken, {
+  logLevel: 'debug',
+});
+
 const PRICE_SELECTOR = 'div[class*="priceValue"]';
 const PERCENTAGE_RISE_THRESHOLD = 0.5;
 let STARTING_PRICE_OVERRIDE;
@@ -19,15 +25,23 @@ const transporter = nodemailer.createTransport({
     pass: process.env.pass,
   },
 });
+
 function sendMail(message) {
-  transporter.sendMail(mailOptions(message), function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(info);
-      console.log('Email sent: ' + info.response);
-    }
-  });
+  // transporter.sendMail(mailOptions(message), function (error, info) {
+  //   if (error) {
+  //     console.log(error);
+  //   } else {
+  //     console.log(info);
+  //     console.log('Email sent: ' + info.response);
+  //   }
+  // });
+  client.messages
+    .create({
+      body: message,
+      from: '+15098222746',
+      to: '+18324324093',
+    })
+    .then((message) => console.log(message.sid));
 }
 let startingPrice;
 let currentPrice;
@@ -53,7 +67,7 @@ const priceChangeHandler = (priceString) => {
       }
     }
   }
-  if (counter % 100 === 0) {
+  if (counter % 60 === 0) {
     sendMail(priceNumber.toString());
   }
   currentPrice = priceNumber;
