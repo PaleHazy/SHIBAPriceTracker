@@ -61,15 +61,16 @@ const priceChangeHandler = (priceString) => {
     // increasing
     const percentIncrease = mafs.increasedPercent(sp, currentPrice);
     console.log('+' + percentIncrease.toFixed(4) + '%');
-    if (percentIncrease > 15) {
-      if (counter % 20 === 0) {
+
+    if (percentIncrease > 5) {
+      if (counter % 5 === 0) {
         sendMail(
           'OIIII ABOVE 16% look at wallet!' + ' https://app.uniswap.org/#/swap'
         );
       }
     }
   }
-  if (counter % 60 === 0) {
+  if (counter % 30 === 0) {
     sendMail(priceNumber.toString());
   }
   currentPrice = priceNumber;
