@@ -38,13 +38,11 @@ function sendMail(message) {
   //     console.log('Email sent: ' + info.response);
   //   }
   // });
-  client.messages
-    .create({
-      body: message,
-      from: '+15098222746',
-      to: '+18324324093',
-    })
-    .then((message) => console.log(message.sid));
+//   client.messages
+//     .create({
+//       body: message,
+//     })
+//     .then((message) => console.log(message.sid));
 }
 let startingPrice;
 let currentPrice;
